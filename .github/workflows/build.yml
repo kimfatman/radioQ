@@ -1,0 +1,65 @@
+name: Build APK
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: Install dependencies
+        run: |
+          cd radioQ
+          flutter pub get
+
+      - name: Build APK
+        run: |
+          cd radioQ
+          flutter build apk --split-per-abi --release
+
+      - name: Upload APK - arm64-v8a
+        uses: actions/upload-artifact@v4
+        with:
+          name: radioQ-arm64-v8a.apk
+          path: radioQ/build/app/outputs/flutter-apk/app-arm64-v8a-release.apk
+
+      - name: Upload APK - armeabi-v7a
+        uses: actions/upload-artifact@v4
+        with:
+          name: radioQ-armeabi-v7a.apk
+          path: radioQ/build/app/outputs/flutter-apk/app-armeabi-v7a-release.apk
+
+      - name: Upload APK - x86_64
+        uses: actions/upload-artifact@v4
+        with:
+          name: radioQ-x86_64.apk
+          path: radioQ/build/app/outputs/flutter-apk/app-x86_64-release.apk
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: |
+            radioQ/build/app/outputs/flutter-apk/app-arm64-v8a-release.apk
+            radioQ/build/app/outputs/flutter-apk/app-armeabi-v7a-release.apk
+            radioQ/build/app/outputs/flutter-apk/app-x86_64-release.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

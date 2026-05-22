@@ -1,0 +1,38 @@
+name: radioq
+description: 基于维基百科的AI播客应用 - 让知识被听见
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  
+  cupertino_icons: ^1.0.6
+  provider: ^6.1.1
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
+  http: ^1.1.2
+  just_audio: ^0.9.36
+  audio_service: ^0.18.12
+  cached_network_image: ^3.3.1
+  shimmer: ^3.0.0
+  flutter_staggered_animations: ^1.1.1
+  share_plus: ^7.2.2
+  url_launcher: ^6.2.4
+  path_provider: ^2.1.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+  hive_generator: ^2.0.1
+  build_runner: ^2.4.8
+
+flutter:
+  uses-material-design: true
+  
+  assets:
+    - assets/images/
+    - assets/icons/
